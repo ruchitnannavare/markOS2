@@ -1746,7 +1746,6 @@ def archive_function():
                 v.config(command=output_canvas.yview)
                 output_canvas.configure(width=300, height=300)
                 output_canvas.configure(xscrollcommand=h.set, yscrollcommand=v.set)
-                #output_canvas = ScrolledText(output_frame, height=10)
                 output_canvas.pack(side=LEFT, expand=True, fill=BOTH)
                 bgcolo = "#585858"
                 roll_number_label = Label(output_canvas, text="mID", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
