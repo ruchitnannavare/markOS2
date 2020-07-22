@@ -1,12 +1,13 @@
 from tkinter import *
 from tkinter import messagebox
 from PIL import ImageTk, Image
+import datetime
 import admissions
 import student_database
 import test
 import sendcustomtext
 import sideview
-import emoji
+import aboutandcontact
 favicon = "favicon.ico"
 root = Tk()
 root.geometry("1000x640")
@@ -16,6 +17,13 @@ root.iconbitmap(favicon)
 girlphoto = Image.open("girlphoto.png")
 girlphoto = girlphoto.resize((400, 400), Image.ANTIALIAS)
 girlphoto = ImageTk.PhotoImage(girlphoto)
+
+# Promote reminder
+if datetime.date.today().month == 4:
+    month_warning = messagebox.showwarning("PROMOTE STUDENTS", "Ignore if already done.\nPLEASE PROMOTE STUDENTS TO NEXT ACADEMIC YEAR.")
+    if month_warning == "ok":
+        pass
+
 # password frame
 
 color_frame_for_class_name = Frame(root, bg="#c3073f", height=100, width=1000, borderwidth=0, highlightthickness=0)
@@ -69,6 +77,10 @@ def getIN():
     playframe_showcase_0.pack_propagate(False)
     girlphoto_label = Label(playframe_showcase_0, image=girlphoto, borderwidth=0)
     girlphoto_label.pack(padx=214, pady=25)
+
+    # Colours
+    coral = "#bababa"
+
     # Button functions for main menu
     def testButton():
         # Deleting old frames and rendering new ones.
@@ -98,7 +110,7 @@ def getIN():
         playframe_showcase_1.pack(side="top", fill="both", expand=True)
         playframe_showcase_1.pack_propagate(False)
         # smaller frames.
-        test_frame1 = Frame(playframe_showcase_1, bg="#bababa", height=150, width=770, borderwidth=0,
+        test_frame1 = Frame(playframe_showcase_1, bg=coral, height=150, width=770, borderwidth=0,
                             highlightthickness=0)
         test_frame1.pack(padx=(0, 25), side="top", expand=True)
         test_frame1.pack_propagate(False)
@@ -109,20 +121,20 @@ def getIN():
         # Filling the newly rendered frames.
         create_new_test_heading = Label(test_frame1, text="Create New Test",
                                         fg="#585858",
-                                        bg="#bababa",
-                                        font=("Helvetica", 25, "italic"))
+                                        bg=coral,
+                                        font=("Helvetica", 25))
         create_new_test_heading.pack(padx=(15, 0), pady=(15, 0), anchor=W)
 
         create_new_test_instruction1 = Label(test_frame1, text="This option helps to create a new test entry to put up the batch's obtained marks into the database.",
                                              fg="#585858",
-                                             bg="#bababa",
+                                             bg=coral,
                                              font=("Helvetica", 8))
         create_new_test_instruction1.pack(padx=(15, 0), pady=(5, 0), anchor=W)
 
         create_new_test_instruction2 = Label(test_frame1,
                                              text="Click CREATE TEST to begin.",
                                              fg="#585858",
-                                             bg="#bababa",
+                                             bg=coral,
                                              font=("Helvetica", 8))
         create_new_test_instruction2.pack(padx=(15, 0), pady=(0, 5), anchor=W)
 
@@ -141,7 +153,7 @@ def getIN():
                                       text="Open Old Test",
                                       fg="#585858",
                                       bg="#bababa",
-                                      font=("Helvetica", 25, "italic"))
+                                      font=("Helvetica", 25))
         open_old_test_heading.pack(padx=(15, 0), pady=(15, 0), anchor=W)
 
         open_old_test_instruction1 = Label(test_frame2,
@@ -218,7 +230,7 @@ def getIN():
                                       text="Send Test Results",
                                       fg="#585858",
                                       bg="#bababa",
-                                      font=("Helvetica", 25, "italic"))
+                                      font=("Helvetica", 25))
         sendText_Test_heading.pack(padx=(15, 0), pady=(15, 0), anchor=W)
 
         sendText_Test_instruction1 = Label(sendText_frame1,
@@ -250,7 +262,7 @@ def getIN():
                                         text="Send Custom Texts",
                                         fg="#585858",
                                         bg="#bababa",
-                                        font=("Helvetica", 25, "italic"))
+                                        font=("Helvetica", 25))
         sendTest_custom_heading.pack(padx=(15, 0), pady=(15, 0), anchor=W)
 
         sendTest_custom_instruction1 = Label(sendText_frame2,
@@ -318,7 +330,7 @@ def getIN():
                                           text="Results",
                                           fg="#585858",
                                           bg="#bababa",
-                                          font=("Helvetica", 25, "italic"))
+                                          font=("Helvetica", 25))
         result_heading.pack(padx=(15, 0), pady=(15, 0), anchor=W)
 
         result_instruction1 = Label(result_frame1,
@@ -395,7 +407,7 @@ def getIN():
                                       text="New Admissions",
                                       fg="#585858",
                                       bg="#bcf5bc",
-                                      font=("Helvetica", 25, "italic"))
+                                      font=("Helvetica", 25))
         new_admission_heading.pack(padx=(15, 0), pady=(15, 0), anchor=W)
 
         new_admission_instruction1 = Label(admission_frame1,
@@ -428,7 +440,7 @@ def getIN():
                                          text="Promote",
                                          fg="#585858",
                                          bg="#8ad0f0",
-                                         font=("Helvetica", 25, "italic"))
+                                         font=("Helvetica", 25))
         promteAdmissions_heading.pack(padx=(15, 0), pady=(15, 0), anchor=W)
 
         promteAdmissions_instruction1 = Label(admission_frame2,
@@ -461,7 +473,7 @@ def getIN():
                                           text="Delete Admission",
                                           fg="#585858",
                                           bg="#ffb1b1",
-                                          font=("Helvetica", 25, "italic"))
+                                          font=("Helvetica", 25))
         delete_admissions_heading.pack(padx=(15, 0), pady=(15, 0), anchor=W)
 
         delete_admissions_instruction1 = Label(admission_frame3,
@@ -537,7 +549,7 @@ def getIN():
                                   text="Student Database",
                                   fg="#585858",
                                   bg="#76ffff",
-                                  font=("Helvetica", 25, "italic"))
+                                  font=("Helvetica", 25))
         show_data_heading.pack(padx=(15, 0), pady=(15, 0), anchor=W)
 
         show_data_instruction1 = Label(student_database_frame1,
@@ -570,7 +582,7 @@ def getIN():
                                         text="Update Database",
                                         fg="#585858",
                                         bg="#76ffff",
-                                        font=("Helvetica", 25, "italic"))
+                                        font=("Helvetica", 25))
         update_database_heading.pack(padx=(15, 0), pady=(15, 0), anchor=W)
 
         update_database_instruction1 = Label(student_database_frame2,
@@ -605,7 +617,7 @@ def getIN():
                                       text="Archives",
                                       fg="#585858",
                                       bg="#76ffff",
-                                      font=("Helvetica", 25, "italic"))
+                                      font=("Helvetica", 25))
         archives_data_heading.pack(padx=(15, 0), pady=(15, 0), anchor=W)
 
         archives_data_instruction1 = Label(student_database_frame3,
@@ -631,7 +643,7 @@ def getIN():
                                       fg="white",
                                       activeforeground="white",
                                       activebackground="#009898",
-                                      command=student_database.access_data_function)
+                                      command=student_database.archive_function)
         archives_data_button.pack(padx=(15, 0), pady=(5, 0), anchor=W)
     # Shows the contact card
     def about():
@@ -675,7 +687,7 @@ def getIN():
                                  text="SideView™",
                                  fg="#585858",
                                  bg=fcolo,
-                                 font=("Helvetica", 25, "italic"))
+                                 font=("Helvetica", 25))
         sideview_heading.pack(padx=(35, 0), pady=(25, 0), anchor=W)
 
         sideview_info1 = Label(about_frame1,
@@ -721,7 +733,7 @@ def getIN():
                                  text="Contact Aexior™",
                                  fg="#585858",
                                  bg=fcolo,
-                                 font=("Helvetica", 25, "italic"))
+                                 font=("Helvetica", 25))
         contact_heading.pack(padx=(35, 0), pady=(25, 0), anchor=W)
 
         contact_info1 = Label(about_frame2,
@@ -754,7 +766,7 @@ def getIN():
                                fg="white",
                                activeforeground="white",
                                activebackground="#ff8c00",
-                               command=sideview.sideview_app)
+                               command=aboutandcontact.contact)
         launch_button.pack(padx=(35, 0), pady=(10, 15), anchor=W)
 
 
@@ -788,7 +800,7 @@ def getIN():
 
     status_bar_frame2 = Frame(root, bg="#adadad", height=28, width=1000, borderwidth=0, highlightthickness=0)
     status_bar_frame2.pack(side="top", fill="both", expand=True)
-    status_bar_label2 = Label(status_bar_frame2, text="Powered by markOS, a  Ruchit Nannavare production.", fg="white", bg="#adadad")
+    status_bar_label2 = Label(status_bar_frame2, text="Powered by markOS, an Aexior production.", fg="white", bg="#adadad")
     status_bar_label2.pack(anchor=E)
 
 
@@ -814,6 +826,6 @@ quit_button.grid(row=5, column=0, padx=(5, 50), pady=(5, 200), sticky=E)
 # status bars
 status_bar_frame = Frame(root, bg="#adadad", height=20, width=1000, borderwidth=0, highlightthickness=0)
 status_bar_frame.pack(side="top", fill="both", expand=True)
-status_bar_label = Label(status_bar_frame, text="Powered by markOS, a  Ruchit Nannavare production.", fg="white", bg="#adadad")
+status_bar_label = Label(status_bar_frame, text="Powered by markOS, an Aexior production.", fg="white", bg="#adadad")
 status_bar_label.pack(anchor=E)
 root.mainloop()
