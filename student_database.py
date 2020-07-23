@@ -898,29 +898,34 @@ def access_data_function():
                 student_list_toplevel.iconbitmap(favicon)
                 student_list_toplevel.resizable(0, 10)
 
-                output_frame = Frame(student_list_toplevel, width=100, height=300)
+                output_frame = Frame(student_list_toplevel, width=948, height=300)
                 output_frame.pack(expand=True, fill=BOTH)
-                output_canvas = Canvas(output_frame, width=500, height=500, scrollregion=(0, 0, 1000, 1000))
+                output_canvas = Canvas(output_frame, width=950, scrollregion=(0, 0, 10000, 10000))
                 h = Scrollbar(output_frame, orient=HORIZONTAL, bg="green")
                 h.pack(side=BOTTOM, fill=X)
                 h.config(command=output_canvas.xview)
                 v = Scrollbar(output_frame, orient=VERTICAL)
                 v.pack(side=RIGHT, fill=Y)
                 v.config(command=output_canvas.yview)
-                output_canvas.configure(width=300, height=300)
                 output_canvas.configure(xscrollcommand=h.set, yscrollcommand=v.set)
                 output_canvas.pack(side=LEFT, expand=True, fill=BOTH)
+
+                the_other_output_canvas = Canvas(output_canvas, width=948)
+                the_other_output_canvas.pack(side=LEFT)
+                output_canvas.bind('<MouseWheel>', lambda event: output_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))
+
+
                 bgcolo = "#585858"
-                roll_number_label = Label(output_canvas, text="mID", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
+                roll_number_label = Label(the_other_output_canvas, text="mID", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
                 roll_number_label.grid(row=0, column=0, ipadx=5)
 
-                name_label = Label(output_canvas, text="First Name", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
+                name_label = Label(the_other_output_canvas, text="First Name", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
                 name_label.grid(row=0, column=1, ipadx=5)
 
-                last_name_label = Label(output_canvas, text="Last Name", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
+                last_name_label = Label(the_other_output_canvas, text="Last Name", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
                 last_name_label.grid(row=0, column=2, ipadx=5)
 
-                send_command_label = Label(output_canvas, text="Open", font=("Helvetica", 12), bg=bgcolo, width=10, fg="white")
+                send_command_label = Label(the_other_output_canvas, text="Open", font=("Helvetica", 12), bg=bgcolo, width=10, fg="white")
                 send_command_label.grid(row=0, column=3)
 
                 class TheConnectingButtons:
@@ -1237,16 +1242,16 @@ def access_data_function():
                 the_bogo_color = "#bababa"
                 indexing_number = 1
                 for data_tuple in reversed(sender_list):
-                    create_roll_label = Label(output_canvas, text=data_tuple[0], bg=the_bogo_color, width=31, font=9)
+                    create_roll_label = Label(the_other_output_canvas, text=data_tuple[0], bg=the_bogo_color, width=31, font=9)
                     create_roll_label.grid(row=indexing_number, column=0, pady=(0, 5))
 
-                    create_name_label = Label(output_canvas, text=data_tuple[3], bg=the_bogo_color, width=31, font=9)
+                    create_name_label = Label(the_other_output_canvas, text=data_tuple[3], bg=the_bogo_color, width=31, font=9)
                     create_name_label.grid(row=indexing_number, column=1, pady=(0, 5))
 
-                    create_last_name_label = Label(output_canvas, text=data_tuple[4], bg=the_bogo_color, width=31, font=9)
+                    create_last_name_label = Label(the_other_output_canvas, text=data_tuple[4], bg=the_bogo_color, width=31, font=9)
                     create_last_name_label.grid(row=indexing_number, column=2, pady=(0, 5))
 
-                    create_button_frame = Frame(output_canvas, bg=the_bogo_color)
+                    create_button_frame = Frame(the_other_output_canvas, bg=the_bogo_color)
                     create_button_frame.grid(row=indexing_number, column=3, pady=(0, 5))
 
 
@@ -1275,6 +1280,8 @@ def access_data_function():
                     open_button.grid(row=0, column=1)
 
                     indexing_number += 1
+                scroll_lord = output_canvas.create_window(0, 0, window=the_other_output_canvas, anchor=NW)
+                output_canvas.configure(scrollregion=output_canvas.bbox("all"))
 
         access_batch_details_button = Button(access_all_toplevel,
                                              text="Next >",
@@ -1735,29 +1742,37 @@ def archive_function():
                 student_list_toplevel.iconbitmap(favicon)
                 student_list_toplevel.resizable(0, 10)
 
-                output_frame = Frame(student_list_toplevel, width=100, height=300)
+                output_frame = Frame(student_list_toplevel, width=948, height=300)
                 output_frame.pack(expand=True, fill=BOTH)
-                output_canvas = Canvas(output_frame, width=500, height=500, scrollregion=(0, 0, 1000, 1000))
+
+                output_canvas = Canvas(output_frame, width=948, scrollregion=(0, 0, 10000, 10000))
                 h = Scrollbar(output_frame, orient=HORIZONTAL, bg="green")
                 h.pack(side=BOTTOM, fill=X)
-                h.config(command=output_canvas.xview)
                 v = Scrollbar(output_frame, orient=VERTICAL)
                 v.pack(side=RIGHT, fill=Y)
-                v.config(command=output_canvas.yview)
-                output_canvas.configure(width=300, height=300)
                 output_canvas.configure(xscrollcommand=h.set, yscrollcommand=v.set)
-                output_canvas.pack(side=LEFT, expand=True, fill=BOTH)
+                h.config(command=output_canvas.xview)
+                v.config(command=output_canvas.yview)
+
+                output_canvas.pack()
+
                 bgcolo = "#585858"
-                roll_number_label = Label(output_canvas, text="mID", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
+
+                the_other_output_canvas = Canvas(output_canvas, width=948)
+                the_other_output_canvas.pack(side=TOP, anchor=N, pady=0)
+
+                output_canvas.bind_all('<MouseWheel>', lambda event: output_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))
+
+                roll_number_label = Label(the_other_output_canvas, text="mID", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
                 roll_number_label.grid(row=0, column=0, ipadx=5)
 
-                name_label = Label(output_canvas, text="First Name", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
+                name_label = Label(the_other_output_canvas, text="First Name", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
                 name_label.grid(row=0, column=1, ipadx=5)
 
-                last_name_label = Label(output_canvas, text="Last Name", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
+                last_name_label = Label(the_other_output_canvas, text="Last Name", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
                 last_name_label.grid(row=0, column=2, ipadx=5)
 
-                send_command_label = Label(output_canvas, text="Open", font=("Helvetica", 12), bg=bgcolo, width=10, fg="white")
+                send_command_label = Label(the_other_output_canvas, text="Open", font=("Helvetica", 12), bg=bgcolo, width=10, fg="white")
                 send_command_label.grid(row=0, column=3)
 
                 class TheConnectingButtons:
@@ -2074,16 +2089,16 @@ def archive_function():
                 the_bogo_color = "#bababa"
                 indexing_number = 1
                 for data_tuple in reversed(sender_list):
-                    create_roll_label = Label(output_canvas, text=data_tuple[0], bg=the_bogo_color, width=31, font=9)
+                    create_roll_label = Label(the_other_output_canvas, text=data_tuple[0], bg=the_bogo_color, width=31, font=9)
                     create_roll_label.grid(row=indexing_number, column=0, pady=(0, 5))
 
-                    create_name_label = Label(output_canvas, text=data_tuple[3], bg=the_bogo_color, width=31, font=9)
+                    create_name_label = Label(the_other_output_canvas, text=data_tuple[3], bg=the_bogo_color, width=31, font=9)
                     create_name_label.grid(row=indexing_number, column=1, pady=(0, 5))
 
-                    create_last_name_label = Label(output_canvas, text=data_tuple[4], bg=the_bogo_color, width=31, font=9)
+                    create_last_name_label = Label(the_other_output_canvas, text=data_tuple[4], bg=the_bogo_color, width=31, font=9)
                     create_last_name_label.grid(row=indexing_number, column=2, pady=(0, 5))
 
-                    create_button_frame = Frame(output_canvas, bg=the_bogo_color)
+                    create_button_frame = Frame(the_other_output_canvas, bg=the_bogo_color)
                     create_button_frame.grid(row=indexing_number, column=3, pady=(0, 5))
 
 
@@ -2112,6 +2127,8 @@ def archive_function():
                     open_button.grid(row=0, column=1)
 
                     indexing_number += 1
+                scroll_lord = output_canvas.create_window(0, 0, window=the_other_output_canvas, anchor=NW)
+                output_canvas.configure(scrollregion=output_canvas.bbox("all"))
 
         access_batch_details_button = Button(access_all_toplevel,
                                              text="Next >",
@@ -2124,6 +2141,7 @@ def archive_function():
                                              activebackground="#1ca0dd",
                                              command=access_batch_details)
         access_batch_details_button.grid(row=3, columnspan=2, column=0, pady=15)
+
 
 
 

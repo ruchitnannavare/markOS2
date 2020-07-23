@@ -148,13 +148,8 @@ def custom_text():
                         new_button.grid(row=0, column=self.column, padx=5, pady=3)
                 def send_to_parent_only():
                     text_toplevel.attributes('-topmost', 'true')
-                    progress = Progressbar(text_toplevel, orient=HORIZONTAL,length=100,  mode='indeterminate')
-                    progress.grid(row=5, columnspan=3, column=0, padx=10, pady=5)
                     try:
-                        progress.start()
                         functionsendtext.custom_text(data_tuple[13], text_box.get("1.0", END))
-                        progress.stop()
-                        progress.destroy()
                         show_success_message = messagebox.showinfo("Sent Successful!", "Message has been successfully sent!")
                         if show_success_message == "ok":
                             pass
@@ -173,13 +168,8 @@ def custom_text():
 
                 def send_to_student_only():
                     text_toplevel.attributes('-topmost', 'true')
-                    progress = Progressbar(text_toplevel, orient=HORIZONTAL,length=100,  mode='indeterminate')
-                    progress.grid(row=5, columnspan=3, column=0, padx=10, pady=5)
                     try:
-                        progress.start()
                         functionsendtext.custom_text(data_tuple[14], text_box.get("1.0", END))
-                        progress.stop()
-                        progress.destroy()
                         show_success_message = messagebox.showinfo("Sent Successful!", "Message has been successfully sent!")
                         if show_success_message == "ok":
                             pass
@@ -325,7 +315,7 @@ def custom_text():
                 text_toplevel.iconbitmap(favicon)
                 text_toplevel.title("Send Text")
                 text_toplevel.attributes('-topmost', 'true')
-                text_toplevel.geometry("300x357")
+                text_toplevel.geometry("300x370")
                 text_toplevel.configure(bg="#bababa")
                 text_toplevel.resizable(0, 0)
 
@@ -355,6 +345,7 @@ def custom_text():
                 text_box_empty_frame = Frame(text_toplevel, bg="#bababa")
                 text_box_empty_frame.grid(row=6, column=0, columnspan=3, padx=5, pady=3)
 
+
                 class TheConnectingButtons:
                     def __init__(self, text, column, command):
                         self.text = text
@@ -383,8 +374,6 @@ def custom_text():
                     try:
                         functionsendtext.custom_text(parent_cid, text_box.get("1.0", END))
                     except ConnectionError as e:
-                        progress_bar_toplevel.destroy()
-                        progress_bar_1_toplevel.destroy()
                         show_warning = messagebox.showwarning("Not connected to the internet.",
                                                               "You are not connected to the internet! Try again later.")
                         if show_warning == "ok":
@@ -403,8 +392,6 @@ def custom_text():
                         functionsendtext.custom_text(student_cid, text_box.get("1.0", END))
 
                     except ConnectionError as e:
-                        progress_bar_0_toplevel.destroy()
-                        progress_bar_1_toplevel.destroy()
                         show_warning = messagebox.showwarning("Not connected to the internet.",
                                                               "You are not connected to the internet! Try again later.")
                         if show_warning == "ok":
@@ -418,53 +405,52 @@ def custom_text():
                             one_proceed_button.configure(state=ACTIVE)
 
                 def send_to_all_parent():
-                    global progress_bar_toplevel
-                    progress_bar_toplevel = Toplevel()
-                    progress_bar_toplevel.geometry("100x10")
-                    progress_bar_toplevel.resizable(0, 0)
-                    progress = Progressbar(progress_bar_toplevel, orient=HORIZONTAL, length=100, mode='indeterminate')
-                    progress.pack()
-                    progress.start()
+                    text_toplevel.geometry("300x420")
+                    progressbar_label = Label(text_toplevel, text="Sending In Progress:", font=("Times", 10), bg="#bababa")
+                    progressbar_label.grid(row=7, column=0, columnspan=2, pady=(5, 0), padx=(10, 0), sticky=W)
+                    progressbar = Progressbar(text_toplevel, length=280, maximum=len(sender_list), value=0, mode="determinate", orient=HORIZONTAL)
+                    progressbar.grid(row=8, column=0, columnspan=3, pady=(5, 0), padx=10, sticky=EW)
+                    progress_variable = 0
                     for student_data_tuple in sender_list:
                         send_to_parent_only(student_data_tuple[0])
-                    progress.stop()
-                    progress_bar_toplevel.destroy()
+                        progress_variable += 1
+                        progressbar.configure(value=progress_variable)
                     show_success_message = messagebox.showinfo("Sent Successful!",
                                                                "Message has been successfully sent!")
                     if show_success_message == "ok":
                         pass
 
                 def send_to_all_students():
-                    global progress_bar_0_toplevel
-                    progress_bar_0_toplevel = Toplevel()
-                    progress_bar_0_toplevel.geometry("100x10")
-                    progress_bar_0_toplevel.attributes('-topmost', 'true')
-                    progress_bar_0_toplevel.resizable(0, 0)
-                    progress = Progressbar(progress_bar_0_toplevel, orient=HORIZONTAL, length=500, mode='indeterminate')
-                    progress.pack()
-                    progress.start()
+                    text_toplevel.geometry("300x420")
+                    progressbar_label = Label(text_toplevel, text="Sending In Progress:", font=("Times", 10),
+                                              bg="#bababa")
+                    progressbar_label.grid(row=7, column=0, columnspan=2, pady=(5, 0), padx=(10, 0), sticky=W)
+                    progressbar = Progressbar(text_toplevel, length=280, maximum=len(sender_list), value=0,
+                                              mode="determinate", orient=HORIZONTAL)
+                    progressbar.grid(row=8, column=0, columnspan=3, pady=(5, 0), padx=10, sticky=EW)
+                    progress_variable = 0
                     for student_data_tuple in sender_list:
                         send_to_student_only(student_data_tuple[1])
-                    progress.stop()
-                    progress_bar_0_toplevel.destroy()
+                        progress_variable += 1
+                        progressbar.configure(value=progress_variable)
                     show_success_message = messagebox.showinfo("Sent Successful!",
                                                                "Message has been successfully sent!")
                     if show_success_message == "ok":
                         pass
 
                 def send_to_both():
-                    global progress_bar_1_toplevel
-                    progress_bar_1_toplevel = Toplevel()
-                    progress_bar_1_toplevel.geometry("100x10")
-                    progress_bar_1_toplevel.resizable(0, 0)
-                    progress = Progressbar(progress_bar_1_toplevel, orient=HORIZONTAL, length=100, mode='indeterminate')
-                    progress.pack()
-                    progress.start()
+                    progressbar_label = Label(text_toplevel, text="Sending In Progress:", font=("Times", 10),
+                                              bg="#bababa")
+                    progressbar_label.grid(row=7, column=0, columnspan=2, pady=(5, 0), padx=(10, 0), sticky=W)
+                    progressbar = Progressbar(text_toplevel, length=280, maximum=len(sender_list), value=0,
+                                              mode="determinate", orient=HORIZONTAL)
+                    progressbar.grid(row=8, column=0, columnspan=3, pady=(5, 0), padx=10, sticky=EW)
+                    progress_variable = 0
                     for student_data_tuple in sender_list:
                         send_to_parent_only(student_data_tuple[0])
                         send_to_student_only(student_data_tuple[1])
-                    progress.stop()
-                    progress_bar_1_toplevel.destroy()
+                        progress_variable += 1
+                        progressbar.configure(value=progress_variable)
                     show_success_message = messagebox.showinfo("Sent Successful!",
                                                                "Message has been successfully sent!")
                     if show_success_message == "ok":
@@ -475,6 +461,8 @@ def custom_text():
                 send_student.describe()
                 send_both = TheConnectingButtons("Both", 2, send_to_both)
                 send_both.describe()
+
+
 
             else:
                 show_warning = messagebox.showwarning("Data not found!", "Data for the year you entered doesnt exist yet!")
@@ -604,29 +592,37 @@ def custom_text():
                 text_box_input = ScrolledText(text_layout_toplevel, width=100, height=10)
                 text_box_input.pack()
 
-                output_frame = Frame(text_layout_toplevel, width=100, height=300)
+                output_frame = Frame(text_layout_toplevel, width=1130, height=300)
                 output_frame.pack(expand=True, fill=BOTH)
-                output_canvas = Canvas(output_frame, width=500, height=500, scrollregion=(0, 0, 1000, 1000))
+                output_canvas = Canvas(output_frame, width=1130, scrollregion=(0, 0, 1000, 1000))
                 h = Scrollbar(output_frame, orient=HORIZONTAL, bg="green")
                 h.pack(side=BOTTOM, fill=X)
                 h.config(command=output_canvas.xview)
                 v = Scrollbar(output_frame, orient=VERTICAL)
                 v.pack(side=RIGHT, fill=Y)
                 v.config(command=output_canvas.yview)
-                output_canvas.configure(width=300, height=300)
                 output_canvas.configure(xscrollcommand=h.set, yscrollcommand=v.set)
                 output_canvas.pack(side=LEFT, expand=True, fill=BOTH)
+
+                the_other_output_canvas = Canvas(output_canvas, width=1130)
+                the_other_output_canvas.pack(side=LEFT)
+
+                """def on_mousewheel(event):
+                    output_canvas.xview_scroll(-1 * (event.delta / 120), "units")"""
+
+                #output_canvas.bind_all("<MouseWheel>", on_mousewheel)
+                output_canvas.bind('<MouseWheel>', lambda event: output_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))
                 bgcolo = "#585858"
-                roll_number_label = Label(output_canvas, text="mID", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
+                roll_number_label = Label(the_other_output_canvas, text="mID", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
                 roll_number_label.grid(row=0, column=0, ipadx=5)
 
-                name_label = Label(output_canvas, text="First Name", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
+                name_label = Label(the_other_output_canvas, text="First Name", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
                 name_label.grid(row=0, column=1, ipadx=5)
 
-                last_name_label = Label(output_canvas, text="Last Name", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
+                last_name_label = Label(the_other_output_canvas, text="Last Name", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
                 last_name_label.grid(row=0, column=2, ipadx=5)
 
-                send_command_label = Label(output_canvas, text="Send To:", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
+                send_command_label = Label(the_other_output_canvas, text="Send To:", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
                 send_command_label.grid(row=0, column=3, ipadx=5)
 
                 class TheConnectingButtons:
@@ -660,8 +656,6 @@ def custom_text():
                     try:
                         functionsendtext.custom_text(parent_cid, text_box_input.get("1.0", END))
                     except ConnectionError as e:
-                        progress_bar_toplevel.destroy()
-                        progress_bar_1_toplevel.destroy()
                         show_warning = messagebox.showwarning("Not connected to the internet.",
                                                               "You are not connected to the internet! Try again later.")
                         if show_warning == "ok":
@@ -680,8 +674,6 @@ def custom_text():
                         functionsendtext.custom_text(student_cid, text_box_input.get("1.0", END))
 
                     except ConnectionError as e:
-                        progress_bar_0_toplevel.destroy()
-                        progress_bar_1_toplevel.destroy()
                         show_warning = messagebox.showwarning("Not connected to the internet.",
                                                               "You are not connected to the internet! Try again later.")
                         if show_warning == "ok":
@@ -712,16 +704,16 @@ def custom_text():
                 the_bogo_color = "#bababa"
                 indexing_number = 1
                 for data_tuple in reversed(sender_list):
-                    create_roll_label = Label(output_canvas, text=data_tuple[0], bg=the_bogo_color, width=31, font=9)
+                    create_roll_label = Label(the_other_output_canvas, text=data_tuple[0], bg=the_bogo_color, width=31, font=9)
                     create_roll_label.grid(row=indexing_number, column=0, pady=(0, 5))
 
-                    create_name_label = Label(output_canvas, text=data_tuple[3], bg=the_bogo_color, width=31, font=9)
+                    create_name_label = Label(the_other_output_canvas, text=data_tuple[3], bg=the_bogo_color, width=31, font=9)
                     create_name_label.grid(row=indexing_number, column=1, pady=(0, 5))
 
-                    create_last_name_label = Label(output_canvas, text=data_tuple[4], bg=the_bogo_color, width=31, font=9)
+                    create_last_name_label = Label(the_other_output_canvas, text=data_tuple[4], bg=the_bogo_color, width=31, font=9)
                     create_last_name_label.grid(row=indexing_number, column=2, pady=(0, 5))
 
-                    create_button_frame = Frame(output_canvas, bg=the_bogo_color)
+                    create_button_frame = Frame(the_other_output_canvas, bg=the_bogo_color)
                     create_button_frame.grid(row=indexing_number, column=3, pady=(0, 5))
 
 
@@ -772,6 +764,9 @@ def custom_text():
 
                     both_button.grid(row=0, column=3, padx=4)
                     indexing_number += 1
+
+                scroll_lord = output_canvas.create_window(0, 0, window=the_other_output_canvas, anchor=NW)
+                output_canvas.configure(scrollregion=output_canvas.bbox("all"))
 
         send_all_next_button = Button(send_specify_toplevel,
                                       text="Next >",
@@ -869,6 +864,7 @@ def send_scores():
         test_name = "Test_" + str(admissions_year.get()) + "_" + open_test_sub_dict[subject_var.get()] + "_" + str(new_test_standard_dict[test_open_standard.get()]) + ".db"
         if os.path.isfile(test_name) == True:
             test_open_prompt_label.configure(text="Please select the test to open.")
+            send_test_open.geometry("380x240")
             admissions_year_label.destroy()
             admissions_year_scroll.destroy()
             test_open_standard_label.destroy()
@@ -896,6 +892,8 @@ def send_scores():
                                           test_name_var,
                                           *test_name_table)
             test_name_scroll.grid(row=1, column=1, sticky=EW, padx=16, pady=5)
+
+
 
             def get_lst(database_name, test_name):
                 connection = sqlite3.connect(database_name)
@@ -946,6 +944,13 @@ def send_scores():
                     print(100)
                     cursor.execute(command)
                     rowss = cursor.fetchall()
+                    progressbar_label = Label(send_test_open, text="Sending In Progress:", font=("Times", 10),
+                                              bg="#d3d3d3")
+                    progressbar_label.grid(row=5, column=0, padx=16, pady=(30, 0), sticky=W)
+                    progressbar = Progressbar(send_test_open, length=340, maximum=len(rowss), value=0,
+                                              mode="determinate", orient=HORIZONTAL)
+                    progressbar.grid(row=6, column=0, columnspan=2, padx=16, pady=(5, 0), sticky=EW)
+                    progress_variable = 0
                     for data_tuple in rowss:
                         print(data_tuple)
                         full_name = str(data_tuple[1]) + " " + str(data_tuple[2])
@@ -956,6 +961,8 @@ def send_scores():
                                                           test_date,
                                                           data_tuple[6],
                                                           data_tuple[7])
+                        progress_variable += 1
+                        progressbar.configure(value=progress_variable)
                 except Error as e:
                     rows = e
                     print(e)
@@ -965,14 +972,14 @@ def send_scores():
             send_test_button = Button(send_test_open,
                                       text="Send Test Result",
                                       font=("Helvetica", 10),
-                                      width=12,
+                                      width=18,
                                       borderwidth=0,
                                       bg="#67e867",
                                       fg="white",
                                       activeforeground="white",
                                       activebackground="#35e035",
                                       command=lambda :send_scores(test_name, test_name_var.get()))
-            send_test_button.grid(row=4, column=1, sticky=EW, padx=16, pady=(30, 0))
+            send_test_button.grid(row=4, column=1, sticky=W, padx=16, pady=(30, 0))
         else:
             show_error = messagebox.showerror("Data does not exist!", "No such test has been created!")
             if show_error == "ok":
