@@ -563,7 +563,7 @@ def access_data_function():
                 admissions_root = Toplevel()
                 admissions_root.geometry("496x545")
                 admissions_root.resizable(0, 0)
-                admissions_root.title("Update Data")
+                admissions_root.title("Current year student data")
                 admissions_root.iconbitmap(favicon)
                 admissions_root.configure(background="#d3d3d3")
                 admissions_standard_list = ["11 SCIENCE", "12 SCIENCE"]
@@ -576,12 +576,12 @@ def access_data_function():
 
                 # Admission prompt
                 admissions_label = Label(admissions_root,
-                                         text="Prompt for updating student data, fill in the details.",
+                                         text="Accessing current year student data.",
                                          anchor=W,
                                          bg="#d3d3d3",
                                          fg="#585858",
                                          font=("Helevetica", 10))
-                admissions_label.grid(row=0, column=0, columnspan=2, ipadx=78, pady=(15, 15))
+                admissions_label.grid(row=0, column=0, columnspan=2, padx=10, pady=(15, 15), sticky=W)
                 # Student details
                 # Students first name
                 admissions_firstname_label = Label(admissions_root,
@@ -764,14 +764,14 @@ def access_data_function():
                     access_data_root.destroy()
                     admissions_root.destroy()
                 okay_button = Button(admissions_root,
-                                     text="Okay",
+                                     text="Close",
                                      width=25,
                                      borderwidth=0,
                                      font=("Helvetica", 9),
-                                     bg="#45b4e7",
+                                     bg="#ff6565",
                                      fg="white",
                                      activeforeground="white",
-                                     activebackground="#1ca0dd",
+                                     activebackground="#ff4f4f",
                                      command=okay_function)
                 okay_button.grid(row=12, column=0, padx=(14, 0), pady=10, sticky=W)
 
@@ -999,7 +999,7 @@ def access_data_function():
                         data_tuple = printgiven(unique_id)
                         print(data_tuple)
                         admissions_root = Toplevel()
-                        admissions_root.geometry("496x545")
+                        admissions_root.geometry("496x525")
                         admissions_root.resizable(0, 0)
                         admissions_root.title("Student Data")
                         admissions_root.iconbitmap(favicon)
@@ -1014,12 +1014,12 @@ def access_data_function():
 
                         # Admission prompt
                         admissions_label = Label(admissions_root,
-                                                 text="Prompt for updating student data, fill in the details.",
+                                                 text="Accessing current year student data.",
                                                  anchor=W,
                                                  bg="#d3d3d3",
                                                  fg="#585858",
                                                  font=("Helevetica", 10))
-                        admissions_label.grid(row=0, column=0, columnspan=2, ipadx=78, pady=(15, 15))
+                        admissions_label.grid(row=0, column=0, columnspan=2, padx=10, pady=(15, 15), sticky=W)
                         # Student details
                         # Students first name
                         admissions_firstname_label = Label(admissions_root,
@@ -1404,9 +1404,9 @@ def archive_function():
                 data_tuple = printgiven(unique_id)
                 print(data_tuple)
                 admissions_root = Toplevel()
-                admissions_root.geometry("496x545")
+                admissions_root.geometry("496x559")
                 admissions_root.resizable(0, 0)
-                admissions_root.title("Update Data")
+                admissions_root.title("Student data from archives")
                 admissions_root.iconbitmap(favicon)
                 admissions_root.configure(background="#d3d3d3")
                 admissions_standard_list = ["11 SCIENCE", "12 SCIENCE"]
@@ -1419,12 +1419,12 @@ def archive_function():
 
                 # Admission prompt
                 admissions_label = Label(admissions_root,
-                                         text="Prompt for accessing student data, fill in the details.",
+                                         text="Accessing student data from archives.",
                                          anchor=W,
                                          bg="#d3d3d3",
                                          fg="#585858",
                                          font=("Helevetica", 10))
-                admissions_label.grid(row=0, column=0, columnspan=2, ipadx=78, pady=(15, 15))
+                admissions_label.grid(row=0, column=0, columnspan=2, padx=10, pady=(15, 15), sticky=W)
                 # Student details
                 # Students first name
                 admissions_firstname_label = Label(admissions_root,
@@ -1502,7 +1502,7 @@ def archive_function():
                 admissions_year = StringVar()
                 admissions_year.set(data_tuple[6])
                 admissions_year_label = Label(admissions_year_frame,
-                                              text="Year of Admission:",
+                                              text="Year of \nAdmission:",
                                               bg="#d3d3d3")
                 admissions_year_label.grid(row=0, column=0, padx=10, pady=10, sticky=W)
 
@@ -1515,7 +1515,7 @@ def archive_function():
                 admissions_standard_frame = Frame(admissions_root, height=8, width=25, bg="#d3d3d3")
                 admissions_standard_frame.grid(row=6, column=1)
                 admissions_standard_label = Label(admissions_standard_frame,
-                                                  text="                 Admitted in Standard:",
+                                                  text="           Admitted            \nin Standard:",
                                                   bg="#d3d3d3")
                 admissions_standard_label.grid(row=0, column=0, padx=10, pady=10, sticky=E)
 
@@ -1607,14 +1607,14 @@ def archive_function():
                     access_data_root.destroy()
                     admissions_root.destroy()
                 okay_button = Button(admissions_root,
-                                     text="Okay",
+                                     text="Close",
                                      width=25,
                                      borderwidth=0,
                                      font=("Helvetica", 9),
-                                     bg="#45b4e7",
+                                     bg="#ff6565",
                                      fg="white",
                                      activeforeground="white",
-                                     activebackground="#1ca0dd",
+                                     activebackground="#ff4f4f",
                                      command=okay_function)
                 okay_button.grid(row=12, column=0, padx=(14, 0), pady=10, sticky=W)
 
@@ -1848,7 +1848,7 @@ def archive_function():
                         admissions_root = Toplevel()
                         admissions_root.geometry("496x545")
                         admissions_root.resizable(0, 0)
-                        admissions_root.title("Student Data")
+                        admissions_root.title("Student data from archives")
                         admissions_root.iconbitmap(favicon)
                         admissions_root.configure(background="#d3d3d3")
                         admissions_standard_list = ["11 SCIENCE", "12 SCIENCE"]
@@ -1861,12 +1861,12 @@ def archive_function():
 
                         # Admission prompt
                         admissions_label = Label(admissions_root,
-                                                 text="Prompt for updating student data, fill in the details.",
+                                                 text="Accessing student data from archives.",
                                                  anchor=W,
                                                  bg="#d3d3d3",
                                                  fg="#585858",
                                                  font=("Helevetica", 10))
-                        admissions_label.grid(row=0, column=0, columnspan=2, ipadx=78, pady=(15, 15))
+                        admissions_label.grid(row=0, column=0, columnspan=2, padx=10, pady=(15, 15), sticky=W)
                         # Student details
                         # Students first name
                         admissions_firstname_label = Label(admissions_root,
@@ -1953,7 +1953,7 @@ def archive_function():
                         admissions_year = StringVar()
                         admissions_year.set(data_tuple[6])
                         admissions_year_label = Label(admissions_year_frame,
-                                                      text="Admission Year:",
+                                                      text="Year of \nAdmission:",
                                                       bg="#d3d3d3")
                         admissions_year_label.grid(row=0, column=0, padx=10, pady=10, sticky=W)
 
@@ -1970,7 +1970,7 @@ def archive_function():
                         admissions_standard_frame = Frame(admissions_root, height=8, width=25, bg="#d3d3d3")
                         admissions_standard_frame.grid(row=6, column=1)
                         admissions_standard_label = Label(admissions_standard_frame,
-                                                          text="                Admitted in Standard:",
+                                                          text="                Admitted              \nin Standard:",
                                                           bg="#d3d3d3")
                         admissions_standard_label.grid(row=0, column=0, padx=10, pady=10, sticky=E)
 
