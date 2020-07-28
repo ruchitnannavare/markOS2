@@ -38,7 +38,7 @@ def new_admissions():
                              bg="#d3d3d3",
                              fg="#585858",
                              font=("Helevetica", 10))
-    admissions_label.grid(row=0, column=0, columnspan=2, ipadx=78, pady=(15, 15))
+    admissions_label.grid(row=0, column=0, columnspan=2, padx=15, pady=(15, 15), sticky=W)
     # Student details
     # Students first name
     admissions_firstname_label = Label(admissions_root,
@@ -209,6 +209,7 @@ def new_admissions():
                 give_warning = messagebox.showerror("Blank is Empty", f"{missing_text} Can not be left empty!")
                 if give_warning == "ok":
                     i.delete(0, END)
+                    break
         return permission
 
     # Check Int and strings

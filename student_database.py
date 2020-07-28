@@ -5,6 +5,7 @@ from sqlite3 import Error
 import os.path
 import json
 import datetime
+import globalvariables
 from tkinter.scrolledtext import ScrolledText
 favicon = "favicon.ico"
 
@@ -848,7 +849,7 @@ def access_data_function():
         standard_scroll.grid(row=1, column=1, sticky=EW, padx=16)
 
         absolute_year = datetime.date.today().year
-        if datetime.date.today().month >= 4:
+        if datetime.date.today().month >= globalvariables.new_academic_year_month_stopper:
             absolute_year = str(absolute_year)
             absolute_year_0 = absolute_year[2:]
             absolute_year_variable = str(absolute_year) + "-" + str(1 + int(absolute_year_0))
@@ -912,8 +913,7 @@ def access_data_function():
 
                 the_other_output_canvas = Canvas(output_canvas, width=948)
                 the_other_output_canvas.pack(side=LEFT)
-                output_canvas.bind('<MouseWheel>', lambda event: output_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))
-
+                output_canvas.bind_all('<MouseWheel>', lambda event: output_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))
 
                 bgcolo = "#585858"
                 roll_number_label = Label(the_other_output_canvas, text="mID", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")

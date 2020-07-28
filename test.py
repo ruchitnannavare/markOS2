@@ -6,6 +6,7 @@ import sqlite3
 from sqlite3 import Error
 import json
 import os.path
+import globalvariables
 favicon = "favicon.ico"
 
 def new_test():
@@ -24,7 +25,7 @@ def new_test():
     new_test_sub_list = ["Chemistry"]
     new_test_sub_dict = {"Chemistry": "chem"}
     new_test_date_month = datetime.date.today().month
-    new_test_month_list = new_test_date_month - 1
+    new_test_month_list_counter = new_test_date_month - 1
     new_test_month_dict = {"January": "jan", "February": "feb", "March": "mar", "April": "apr", "May": "may", "June": "jun",
                            "July": "jul", "August": "aug", "September": "sep", "October": "oct", "November": "nov",
                            "December": "dec"}
@@ -210,6 +211,7 @@ def new_test():
             new_test_root.attributes('-topmost', 'false')
             # Test database creator
             test_connection = "Test_" + new_test_academic_year.get() + "_" + str(new_test_sub_dict[str(new_test_subject.get())]) + "_" + str(new_test_standard_dict[new_test_standard.get()]) + ".db"
+            test_database_name = "Test_" + new_test_academic_year.get() + "_" + str(new_test_sub_dict[str(new_test_subject.get())]) + "_" + str(new_test_standard_dict[new_test_standard.get()])
             test_name = "CH" + str(new_test_chapter.get()) + "SEM" + str(new_test_semester_dict[str(new_test_semester.get())]) + "DATE" + str(new_test_date.get()) + new_test_month_dict[new_test_month.get()]
             print(test_name)
             connect = sqlite3.connect(test_connection)
@@ -227,11 +229,34 @@ def new_test():
                 with open("student_test_key_data_for_standard.json", "r") as json_file:
                     test_name_repositary = json.load(json_file)
                 try:
-                    test_name_repositary[new_test_academic_year.get()].append(test_name)
-                except:
-                    test_name_repositary[new_test_academic_year.get()] = [test_name]
+                    if len(test_name_repositary[test_database_name][new_test_month_dict[new_test_month.get()]]) == 0:
+                        test_name_repositary[test_database_name][new_test_month_dict[new_test_month.get()]].append(
+                            test_name)
+                    else:
+                        permission = True
+                        for ele in test_name_repositary[test_database_name][new_test_month_dict[new_test_month.get()]]:
+                            if ele == test_name:
+                                permission = False
+                                break
+                        if permission == True:
+                            test_name_repositary[test_database_name][new_test_month_dict[new_test_month.get()]].append(test_name)
 
-                try:
+                except:
+                    permission_1 = False
+                    """test_name_repositary[test_database_name] = {}"""
+                    keylist = list(test_name_repositary.keys())
+                    for ele in keylist:
+                        if ele == test_database_name:
+                            test_name_repositary[test_database_name][new_test_month_dict[new_test_month.get()]] = [test_name]
+                            break
+                        else:
+                            permission_1 = True
+                    if permission_1 == True:
+                        test_name_repositary[test_database_name] = {}
+
+                        test_name_repositary[test_database_name][new_test_month_dict[new_test_month.get()]] = [test_name]
+
+                """try:
                     test_name_repositary[str(new_test_standard_dict[new_test_standard.get()])].append(test_name)
                 except:
                     test_name_repositary[str(new_test_standard_dict[new_test_standard.get()])] = [test_name]
@@ -244,7 +269,7 @@ def new_test():
                     test_name_repositary["DATE"] = {test_name: DATE}
                 except:
                     DATE = str(new_test_date.get()) + new_test_month_dict[new_test_month.get()]
-                    test_name_repositary["DATE"][test_name].update(DATE)
+                    test_name_repositary["DATE"][test_name].update(DATE)"""
                 with open("student_test_key_data_for_standard.json", "w") as json_file:
                     json.dump(test_name_repositary, json_file)
                 cursor.execute(create_table)
@@ -343,7 +368,10 @@ def new_test():
                             curse.close()
 
                         def cal_percent(score, maxval):
-                            return ((score / maxval) * 100)
+                            if score == globalvariables.absent_value_marker:
+                                return globalvariables.absent_value_marker
+                            else:
+                                return ((score / maxval) * 100)
 
                         def insertion(Rollno, marks_scored, max_marks, admin_database, std):
                             det = retrv_det(Rollno, admin_database, std)
@@ -564,11 +592,29 @@ def open_old_test():
                 totalrows = len(lst)
                 totalcolumns = len(lst[1])
                 show_test_root = Toplevel()
+                show_test_root.geometry("1122x200")
+
+                output_frame = Frame(show_test_root)
+                output_frame.pack(expand=True, fill=BOTH)
+                output_canvas = Canvas(output_frame, height=200, scrollregion=(0, 0, 10000, 10000))
+
+                v = Scrollbar(output_frame, orient=VERTICAL)
+                v.pack(side=RIGHT, fill=Y)
+                v.config(command=output_canvas.yview)
+                output_canvas.configure(yscrollcommand=v.set)
+                output_canvas.pack(side=LEFT, expand=True, fill=BOTH)
+
+                the_other_output_canvas = Canvas(output_canvas, width=948)
+                the_other_output_canvas.pack(side=LEFT)
+                output_canvas.bind_all('<MouseWheel>',
+                                       lambda event: output_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))
+
                 show_test_root.title(test_name_var.get())
                 show_test_root.iconbitmap(favicon)
                 show_test_root.resizable(0, 0)
-                mt = Mytable(show_test_root)
-
+                mt = Mytable(the_other_output_canvas)
+                scroll_lord = output_canvas.create_window(0, 0, window=the_other_output_canvas, anchor=NW)
+                output_canvas.configure(scrollregion=output_canvas.bbox("all"))
 
             open_old_test_old_test_button.configure(text="See Test", command=show_table)
         else:

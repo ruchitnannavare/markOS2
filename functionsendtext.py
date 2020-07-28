@@ -43,13 +43,13 @@ def send_bar_parent(bar_image, g_cid):
     img_data = json.loads(imgbb_return.content)
     bot.send_photo(g_cid, img_data["data"]["url_viewer"], caption="Result Bar")
 
-def send_bar_parent_both(bar_image, g_cid, s_cid):
-    imgbb_request = f"https://api.imgbb.com/1/upload?expiration=60&key={imgbb_key}"
+def send_pie_parent_both(bar_image, g_cid, s_cid):
+    imgbb_request = f"https://api.imgbb.com/1/upload?expiration=240&key={imgbb_key}"
     payload = {"image": open(bar_image, "rb")}
     imgbb_return = requests.post(imgbb_request, files=payload)
     img_data = json.loads(imgbb_return.content)
-    bot.send_photo(g_cid, img_data["data"]["url_viewer"])
-    bot.send_photo(s_cid, img_data["data"]["url_viewer"])
+    bot.send_photo(g_cid, img_data["data"]["url_viewer"], caption="Green colored slice indicates ward secured percentage between 75-100%.\nYellow colored slice indicates ward secured percentage between 50-74%.\norange colored slice indicates ward secured percentage between 25-49%.\nRed colored slice indicates, ward secured percentage between 0-25%.\nBlack colored slice indicates that your  ward was absent when the test was conducted.\n")
+    bot.send_photo(s_cid, img_data["data"]["url_viewer"], caption="Green colored slice indicates ward secured percentage between 75-100%.\nYellow colored slice indicates ward secured percentage between 50-74%.\norange colored slice indicates ward secured percentage between 25-49%.\nRed colored slice indicates, ward secured percentage between 0-25%.\nBlack colored slice indicates that your  ward was absent when the test was conducted.\n")
 
 
 

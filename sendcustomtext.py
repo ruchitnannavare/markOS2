@@ -906,12 +906,16 @@ def send_scores():
                     print(100)
                     cursor.execute(command)
                     rowss = cursor.fetchall()
-                except Error as e:
-                    rows = e
-                    print(e)
-                rows = row + rowss
 
-                return rows
+                except Error as e:
+                    print(e)
+                try:
+                    rows = row + rowss
+                    return rows
+                except UnboundLocalError:
+                    show_warning = messagebox.showwarning("Error!", "Please select a test first.")
+                    if show_warning == "ok":
+                        pass
 
             def show_table():
                 class Mytable:
@@ -934,9 +938,7 @@ def send_scores():
             def send_scores(database_name, test_name):
                 connection = sqlite3.connect(database_name)
                 cursor = connection.cursor()
-                with open("student_test_key_data_for_standard.json", "r") as json_file:
-                    predominant_dictionary = json.load(json_file)
-                test_date = predominant_dictionary["DATE"][test_name]
+
                 row = [("Rollno.", "First Name", "Last Name", "Marks Scored", "Maximun Marks", "Percentage Secured")]
                 try:
 
@@ -951,6 +953,7 @@ def send_scores():
                                               mode="determinate", orient=HORIZONTAL)
                     progressbar.grid(row=6, column=0, columnspan=2, padx=16, pady=(5, 0), sticky=EW)
                     progress_variable = 0
+                    test_date = test_name[13:18]
                     for data_tuple in rowss:
                         print(data_tuple)
                         full_name = str(data_tuple[1]) + " " + str(data_tuple[2])

@@ -8,6 +8,8 @@ import test
 import sendcustomtext
 import sideview
 import aboutandcontact
+import resultfunctioncontainer
+import globalvariables
 favicon = "favicon.ico"
 root = Tk()
 root.geometry("1000x640")
@@ -19,7 +21,7 @@ girlphoto = girlphoto.resize((400, 400), Image.ANTIALIAS)
 girlphoto = ImageTk.PhotoImage(girlphoto)
 
 # Promote reminder
-if datetime.date.today().month == 4:
+if datetime.date.today().month == globalvariables.new_academic_year_month_stopper:
     month_warning = messagebox.showwarning("PROMOTE STUDENTS", "Ignore if already done.\nPLEASE PROMOTE STUDENTS TO NEXT ACADEMIC YEAR.")
     if month_warning == "ok":
         pass
@@ -50,11 +52,11 @@ name_label_frame1.grid(row=0, column=2)
 # For the username window that actually contains the username and password
 spacerlabel1 = Label(username_frame, text=" ", bg="#d3d3d3")
 spacerlabel1.grid(row=0, column=0, ipadx=50, pady=(10, 0))
-usernamelabel = Label(username_frame, text="Username:", font=("Times", 10, "bold"), bg="#d3d3d3")
+usernamelabel = Label(username_frame, text="Username:", font=("Helvetica", 10, "bold"), bg="#d3d3d3")
 usernamelabel.grid(row=1, column=0, padx=50, pady=(125, 5), sticky=W)
 username_entry = Entry(username_frame, width=25, borderwidth=0, font=("Times", 14))
 username_entry.grid(row=2, column=0, padx=50)
-passwordlabel = Label(username_frame, text="Password:", font=("Times", 10, "bold"), bg="#d3d3d3")
+passwordlabel = Label(username_frame, text="Password:", font=("Helvetica", 10, "bold"), bg="#d3d3d3")
 passwordlabel.grid(row=3, column=0, padx=50, sticky=W)
 password_entry = Entry(username_frame, width=25, borderwidth=0, show="*", font=("Times", 14))
 password_entry.grid(row=4, column=0, padx=50, pady=5)
@@ -116,7 +118,7 @@ def getIN():
         test_frame1.pack_propagate(False)
         test_frame2 = Frame(playframe_showcase_1, bg="#bababa", height=150, width=770, borderwidth=0,
                             highlightthickness=0)
-        test_frame2.pack(padx=(0, 25), side="top", expand=True, anchor=N)
+        test_frame2.pack(padx=(0, 25), side="top", expand=True)
         test_frame2.pack_propagate(False)
         # Filling the newly rendered frames.
         create_new_test_heading = Label(test_frame1, text="Create New Test",
@@ -223,7 +225,7 @@ def getIN():
                                 width=770,
                                 borderwidth=0,
                                 highlightthickness=0)
-        sendText_frame2.pack(padx=(0, 25), side="top", expand=True, anchor=N)
+        sendText_frame2.pack(padx=(0, 25), side="top", expand=True)
         sendText_frame2.pack_propagate(False)
         # Filling the newly rendered frames
         sendText_Test_heading = Label(sendText_frame1,
@@ -325,38 +327,77 @@ def getIN():
                                 highlightthickness=0)
         result_frame1.pack(padx=(0, 25), side="top", expand=True)
         result_frame1.pack_propagate(False)
+
+        result_frame2 = Frame(playframe_showcase_3, bg="#bababa", height=150, width=770, borderwidth=0,
+                              highlightthickness=0)
+        result_frame2.pack(padx=(0, 25), side="top", expand=True)
+        result_frame2.pack_propagate(False)
         # packing stuff into the smaller frame
-        result_heading = Label(result_frame1,
-                                          text="Results",
+        see_result_heading = Label(result_frame1,
+                                          text="See Results",
                                           fg="#585858",
                                           bg="#bababa",
                                           font=("Helvetica", 25))
-        result_heading.pack(padx=(15, 0), pady=(15, 0), anchor=W)
+        see_result_heading.pack(padx=(15, 0), pady=(15, 0), anchor=W)
 
-        result_instruction1 = Label(result_frame1,
-                                               text="This option delivers the average score of tests taken in a given time frame to the parents of the ward with visual representation.",
+        see_result_instruction1 = Label(result_frame1,
+                                               text="This feature helps to visualize the performance of the student in a given time frame.",
                                                fg="#585858",
                                                bg="#bababa",
                                                font=("Helvetica", 8))
-        result_instruction1.pack(padx=(15, 0), pady=(5, 0), anchor=W)
+        see_result_instruction1.pack(padx=(15, 0), pady=(5, 0), anchor=W)
 
-        result_instruction2 = Label(result_frame1,
-                                                 text="Click SEND RESULTS to begin.",
+        see_result_instruction2 = Label(result_frame1,
+                                                 text="Click SEE RESULTS to begin.",
                                                  fg="#585858",
                                                  bg="#bababa",
                                                  font=("Helvetica", 8))
-        result_instruction2.pack(padx=(15, 0), pady=(0, 5), anchor=W)
+        see_result_instruction2.pack(padx=(15, 0), pady=(0, 5), anchor=W)
         # Result button
-        result_button = Button(result_frame1,
-                                            text="Send Results",
+        see_result_button = Button(result_frame1,
+                                            text="See Results",
                                             font=("Helvetica", 10),
                                             width=12,
                                             borderwidth=0,
                                             bg="#45b4e7",
                                             fg="white",
                                             activeforeground="white",
-                                            activebackground="#1ca0dd")
-        result_button.pack(padx=(15, 0), pady=(5, 0), anchor=W)
+                                            activebackground="#1ca0dd",
+                               command=resultfunctioncontainer.see_result_data_function)
+        see_result_button.pack(padx=(15, 0), pady=(5, 0), anchor=W)
+
+        send_result_heading = Label(result_frame2,
+                               text="Send Results",
+                               fg="#585858",
+                               bg="#bababa",
+                               font=("Helvetica", 25))
+        send_result_heading.pack(padx=(15, 0), pady=(15, 0), anchor=W)
+
+        send_result_instruction1 = Label(result_frame2,
+                                    text="This option delivers the average score of tests taken in a given time frame to the parents of the ward with visual representation.",
+                                    fg="#585858",
+                                    bg="#bababa",
+                                    font=("Helvetica", 8))
+        send_result_instruction1.pack(padx=(15, 0), pady=(5, 0), anchor=W)
+
+        send_result_instruction2 = Label(result_frame2,
+                                    text="Click SEND RESULTS to begin.",
+                                    fg="#585858",
+                                    bg="#bababa",
+                                    font=("Helvetica", 8))
+        send_result_instruction2.pack(padx=(15, 0), pady=(0, 5), anchor=W)
+        # Result button
+        send_result_button = Button(result_frame2,
+                               text="Send Results",
+                               font=("Helvetica", 10),
+                               width=12,
+                               borderwidth=0,
+                               bg="#45b4e7",
+                               fg="white",
+                               activeforeground="white",
+                               activebackground="#1ca0dd",
+                               command=resultfunctioncontainer.send_result_data_function)
+        send_result_button.pack(padx=(15, 0), pady=(5, 0), anchor=W)
     # Admissions
     def admission():
         # Dealeting old frames and rendering new frames.
