@@ -5,6 +5,8 @@ from sqlite3 import Error
 import datetime
 import os
 import json
+from telegram import TelegramError
+from requests import ConnectionError
 import matplotlib.pyplot as plt
 import pandas as pd
 import globalvariables
@@ -246,7 +248,8 @@ def send_result_data_function():
                                 plt.xlabel(student_id)
                                 plt.ylabel('Percentage secured')
 
-                                plt.title(f"Performance of {name[0]}.")
+                                avg = "{:5.2f}%".format(avg)
+                                plt.title(f"Performance of {first_name} {last_name}:\n Percentage Secured:{avg}")
 
                                 plt.legend(["Percentage Secured."])
                                 plt.ylim(10, 100)
@@ -301,6 +304,8 @@ def send_result_data_function():
                                 return plt
 
                             def gen_cpie(class_database, class_name, test_database, test_list):
+                                global network_permission
+                                network_permission = True
                                 connect = sqlite3.connect(class_database)
                                 curse = connect.cursor()
                                 i = 0
@@ -311,23 +316,39 @@ def send_result_data_function():
                                     curse.execute(select_cmd)
                                     row = curse.fetchall()
                                     print(row)
-
                                     for element in row:
                                         id = element[0]
                                         out_pie = gen_pie(test_list, test_database, id, element[1], element[2])
-                                        cold = "pie{}.png".format(i)
-                                        out_pie.savefig(cold)
+                                        cold2 = "pie{}.png".format(i)
+                                        out_pie.savefig(cold2)
                                         out_pie.clf()
-                                        functionsendtext.send_pie_parent_both(cold, element[3], element[4])
-                                        os.remove(cold)
-
+                                        try:
+                                            try:
+                                                functionsendtext.send_pie_parent_both(cold2, element[3], element[4])
+                                            except TelegramError as e:
+                                                print(e)
+                                                os.remove(cold2)
+                                                pass
+                                        except:
+                                            loading_toplevel.destroy()
+                                            network_permission = False
+                                            show_net_error = messagebox.showwarning("No internet connection", "No internet connection, please try again later."  )
+                                            if show_net_error == "ok":
+                                                os.remove(cold2)
+                                                test_open.destroy()
+                                                return
+                                        os.remove(cold2)
                                         i = i + 1
                                         print("DDDDDDDDDoneeeeeeeee")
+
+
                                 except Error as e:
                                     print(e)
 
-                            def gen_graph(class_database, class_name, test_database, test_list):
 
+
+                            def gen_graph(class_database, class_name, test_database, test_list):
+                                global network_permission
                                 connect = sqlite3.connect(class_database)
                                 curse = connect.cursor()
 
@@ -338,27 +359,53 @@ def send_result_data_function():
                                     curse.execute(select_cmd)
                                     row = curse.fetchall()
                                     i = 0
-
                                     for element in row:
                                         id = element[0]
                                         out = gen_bar(test_list, test_database, id, element[1], element[2])
-                                        cold = "graph{}.png".format(i)
-                                        out.savefig(cold)
+                                        cold1 = "graph{}.png".format(i)
+                                        out.savefig(cold1)
                                         out.clf()
-                                        functionsendtext.send_pie_parent_both(cold, element[3], element[4])
-                                        os.remove(cold)
+                                        print(network_permission)
+                                        if network_permission == True:
+                                            try:
+                                                try:
+                                                    functionsendtext.send_bar_parent_both(cold1, element[3], element[4])
+                                                except TelegramError:
+                                                    print(TelegramError)
+                                                    pass
+                                            except:
+                                                loading_toplevel.destroy()
+                                                show_net_error = messagebox.showwarning("No internet connection", "No internet connection, please try again later."  )
+                                                if show_net_error == "ok":
+                                                    os.remove(cold1)
+                                                    test_open.destroy()
+                                                    return
+                                        else:
+                                            return
+                                        os.remove(cold1)
                                         i = i + 1
                                         print("DDDDDDDDDoneeeeeeeee")
-
                                 except Error as e:
                                     print(e)
 
+                            loading_toplevel = Toplevel()
+                            loading_toplevel.geometry("500x50")
+                            loading_toplevel.configure(bg="#d3d3d3")
+                            tell_label = Label(loading_toplevel,
+                                               text="Please wait while we process the sending requests\nDo not touch the program!",
+                                               bg="#d3d3d3",
+                                               fg="red",
+                                               font=("Helevetica", 15))
+                            tell_label.pack()
                             gen_cpie(connection_name, xcude, test_name, target_month_list)
                             gen_graph(connection_name, xcude, test_name, target_month_list)
-
-
-
+                            loading_toplevel.destroy()
+                            inform_success = messagebox.showinfo("Request Successful",
+                                                                 "All messages has been sent succesfully!")
+                            if inform_success == "ok":
+                                test_open.destroy()
                     proceed_button.configure(text="Send",
+
                                              command=access_batch_details,
                                              bg="#67e867",
                                              fg="white",
@@ -622,7 +669,8 @@ def send_result_data_function():
                                     plt.xlabel(student_id)
                                     plt.ylabel('Percentage secured')
 
-                                    plt.title(f"Performance of {name[0]}.")
+                                    avg = "{:5.2f}%".format(avg)
+                                    plt.title(f"Performance of {first_name} {last_name}:\n Percentage Secured:{avg}")
 
                                     plt.legend(["Percentage Secured."])
                                     plt.ylim(10, 100)
@@ -677,6 +725,8 @@ def send_result_data_function():
                                     return plt
 
                                 def gen_cpie(class_database, class_name, test_database, test_list):
+                                    global network_permission
+                                    network_permission = True
                                     connect = sqlite3.connect(class_database)
                                     curse = connect.cursor()
                                     i = 0
@@ -694,16 +744,26 @@ def send_result_data_function():
                                             cold = "pie{}.png".format(i)
                                             out_pie.savefig(cold)
                                             out_pie.clf()
-                                            functionsendtext.send_pie_parent_both(cold, element[3], element[4])
+                                            try:
+                                                functionsendtext.send_pie_parent_both(cold, element[3], element[4])
+                                            except:
+                                                network_permission = False
+                                                loading_toplevel.destroy()
+                                                show_net_error = messagebox.showwarning("No internet connection",
+                                                                                        "No internet connection, please try again later.")
+                                                if show_net_error == "ok":
+                                                    os.remove(cold)
+                                                    test_open.destroy()
+                                                    return
                                             os.remove(cold)
-
                                             i = i + 1
                                             print("DDDDDDDDDoneeeeeeeee")
+
                                     except Error as e:
                                         print(e)
 
                                 def gen_graph(class_database, class_name, test_database, test_list):
-
+                                    global network_permission
                                     connect = sqlite3.connect(class_database)
                                     curse = connect.cursor()
 
@@ -714,23 +774,45 @@ def send_result_data_function():
                                         curse.execute(select_cmd)
                                         row = curse.fetchall()
                                         i = 0
-
                                         for element in row:
                                             id = element[0]
                                             out = gen_bar(test_list, test_database, id, element[1], element[2])
                                             cold = "graph{}.png".format(i)
                                             out.savefig(cold)
                                             out.clf()
-                                            functionsendtext.send_pie_parent_both(cold, element[3], element[4])
+                                            if network_permission == True:
+                                                try:
+                                                    functionsendtext.send_bar_parent_both(cold, element[3], element[4])
+                                                except:
+                                                    loading_toplevel.destroy()
+                                                    show_net_error = messagebox.showwarning("No internet connection",
+                                                                                            "No internet connection, please try again later.")
+                                                    if show_net_error == "ok":
+                                                        os.remove(cold)
+                                                        test_open.destroy()
+                                                        return
                                             os.remove(cold)
                                             i = i + 1
                                             print("DDDDDDDDDoneeeeeeeee")
-
                                     except Error as e:
                                         print(e)
 
+                                loading_toplevel = Toplevel()
+                                loading_toplevel.geometry("300x30")
+                                loading_toplevel.configure(bg="#d3d3d3")
+                                tell_label = Label(loading_toplevel,
+                                                   text="Please wait while we process the sending requests\nDo not touch the program!",
+                                                   bg="#d3d3d3",
+                                                   fg="red",
+                                                   font=("Helevetica", 15))
+                                tell_label.pack()
                                 gen_cpie(connection_name, xcude, test_name, target_month_list)
                                 gen_graph(connection_name, xcude, test_name, target_month_list)
+                                loading_toplevel.destroy()
+                                inform_success = messagebox.showinfo("Request Successful",
+                                                                     "All messages has been sent succesfully!")
+                                if inform_success == "ok":
+                                    test_open.destroy()
                             else:
                                 print(1000000000000000)
                         proceed_button.configure(text="Send",
@@ -1095,8 +1177,8 @@ def see_result_data_function():
                                 plt.xlabel(student_id)
                                 plt.ylabel('Percentage secured')
 
-                                plt.title(f"Performance of {name[0]}.")
-
+                                avg = "{:5.2f}%".format(avg)
+                                plt.title(f"Performance of {first_name} {last_name}:\n Percentage Secured:{avg}")
                                 plt.legend(["Percentage Secured."])
                                 plt.ylim(10, 100)
 
@@ -1572,7 +1654,8 @@ def see_result_data_function():
                                     plt.xlabel(student_id)
                                     plt.ylabel('Percentage secured')
 
-                                    plt.title(f"Performance of {name[0]}.")
+                                    avg = "{:5.2f}%".format(avg)
+                                    plt.title(f"Performance of {first_name} {last_name}:\n Percentage Secured:{avg}")
 
                                     plt.legend(["Percentage Secured."])
                                     plt.ylim(10, 100)
