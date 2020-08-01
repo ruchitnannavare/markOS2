@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter.ttk import Progressbar
 import sqlite3
 from sqlite3 import Error
 import datetime
@@ -390,6 +391,8 @@ def send_result_data_function():
 
                             loading_toplevel = Toplevel()
                             loading_toplevel.geometry("500x50")
+                            loading_toplevel.title("Loading...")
+                            loading_toplevel.iconbitmap(favicon)
                             loading_toplevel.configure(bg="#d3d3d3")
                             tell_label = Label(loading_toplevel,
                                                text="Please wait while we process the sending requests\nDo not touch the program!",
@@ -397,6 +400,21 @@ def send_result_data_function():
                                                fg="red",
                                                font=("Helevetica", 15))
                             tell_label.pack()
+                            cancel_button = Button(loading_toplevel,
+                                                   text="CANCEL",
+                                                   font=("Helvetica", 10),
+                                                   width=15,
+                                                   borderwidth=0,
+                                                   bg="#ff6565",
+                                                   fg="white",
+                                                   activeforeground="white",
+                                                   activebackground="#ff4f4f",
+                                                   command=loading_toplevel.quit)
+                            cancel_button.pack()
+                            progress_bar = Progressbar(loading_toplevel, orient=HORIZONTAL, length=500, mode="indeterminate")
+                            progress_bar.pack
+
+                            progress_bar.start()
                             gen_cpie(connection_name, xcude, test_name, target_month_list)
                             gen_graph(connection_name, xcude, test_name, target_month_list)
                             loading_toplevel.destroy()

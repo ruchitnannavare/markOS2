@@ -39,7 +39,7 @@ def custom_text():
     # Function for one
     def send_one():
         one_proceed_button.configure(state=DISABLED)
-        send_one_toplevel = Toplevel()
+        send_one_toplevel = Toplevel(custom_root)
         send_one_toplevel.iconbitmap(favicon)
         send_one_toplevel.title("markOS™")
         send_one_toplevel.configure(bg="#bababa")
@@ -99,7 +99,7 @@ def custom_text():
 
                 data_tuple = printgiven(unique_id)
                 print(found_list)
-                send_one_toplevel.destroy()
+                custom_root.destroy()
                 text_toplevel = Toplevel()
                 text_toplevel.iconbitmap(favicon)
                 text_toplevel.title("Send Text")
@@ -234,7 +234,7 @@ def custom_text():
 
     def send_all():
         custom_root.attributes('-topmost', 'false')
-        send_all_toplevel = Toplevel()
+        send_all_toplevel = Toplevel(custom_root)
         send_all_toplevel.geometry("255x180")
         send_all_toplevel.resizable(0, 0)
         send_all_toplevel.title("Send Text")
@@ -310,7 +310,7 @@ def custom_text():
                 sender_list = get_chatids(connection_name, xcude)
 
 
-                send_all_toplevel.destroy()
+                custom_root.destroy()
                 text_toplevel = Toplevel()
                 text_toplevel.iconbitmap(favicon)
                 text_toplevel.title("Send Text")
@@ -510,7 +510,7 @@ def custom_text():
 
     def send_specify():
         custom_root.attributes('-topmost', 'false')
-        send_specify_toplevel = Toplevel()
+        send_specify_toplevel = Toplevel(custom_root)
         send_specify_toplevel.geometry("255x180")
         send_specify_toplevel.resizable(0, 0)
         send_specify_toplevel.title("Send Text")
@@ -586,8 +586,9 @@ def custom_text():
 
                 sender_list = get_chatids(connection_name, xcude)
 
-                send_specify_toplevel.destroy()
+                custom_root.destroy()
                 text_layout_toplevel = Toplevel()
+                text_layout_toplevel.resizable(0, 10)
 
                 text_box_input = ScrolledText(text_layout_toplevel, width=100, height=10)
                 text_box_input.pack()
@@ -611,7 +612,7 @@ def custom_text():
                     output_canvas.xview_scroll(-1 * (event.delta / 120), "units")"""
 
                 #output_canvas.bind_all("<MouseWheel>", on_mousewheel)
-                output_canvas.bind('<MouseWheel>', lambda event: output_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))
+                output_canvas.bind_all('<MouseWheel>', lambda event: output_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))
                 bgcolo = "#585858"
                 roll_number_label = Label(the_other_output_canvas, text="mID", font=("Helvetica", 12), bg=bgcolo, width=30, fg="white")
                 roll_number_label.grid(row=0, column=0, ipadx=5)
@@ -910,10 +911,12 @@ def send_scores():
                 except Error as e:
                     print(e)
                 try:
+                    send_test_open.attributes('-topmost', 'false')
                     rows = row + rowss
                     return rows
                 except UnboundLocalError:
-                    show_warning = messagebox.showwarning("Error!", "Please select a test first.")
+                    send_test_open.attributes('-topmost', 'true')
+                    show_warning = messagebox.showerror("Error!", "Please select a test first.")
                     if show_warning == "ok":
                         pass
 
@@ -929,7 +932,7 @@ def send_scores():
 
                 totalrows = len(lst)
                 totalcolumns = len(lst[1])
-                show_test_root = Toplevel()
+                show_test_root = Toplevel(send_test_open)
                 show_test_root.title(test_name_var.get())
                 show_test_root.iconbitmap(favicon)
                 show_test_root.resizable(0, 0)

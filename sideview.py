@@ -38,7 +38,7 @@ def sideview_app():
                                     state=DISABLED)
         update_data_buttom.grid(row=2, columnspan=2, padx=(15, 0), pady=(5, 0))
         unique_id = str(student_roll_input.get()).upper()
-        with open("C:/Users/Ruchit/PycharmProjects/markOS/student_key_data.json", "r") as file:
+        with open("student_key_data.json", "r") as file:
             try:
                 dictionary = json.load(file)
                 found_list = dictionary[unique_id]
@@ -529,7 +529,7 @@ def sideview_app():
         try:
             totalrows = len(final_list)
             totalcolumns = len(final_list[1])
-            show_chat_detail_root = Toplevel()
+            show_chat_detail_root = Toplevel(sideview)
             show_chat_detail_root.iconbitmap(favicon)
             show_chat_detail_root.title("SideView™")
             show_chat_detail_root.resizable(0, 0)

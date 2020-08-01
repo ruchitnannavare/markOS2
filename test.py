@@ -197,12 +197,27 @@ def new_test():
     def check_int(input):
         permission = True
         try:
-            float(input.get())
+            print(type(input.get()))
+            if float(input.get()) > 0:
+                print(type(input.get()))
+                pass
+            else:
+                permission = False
+                integer_error = messagebox.showerror("Score Error",
+                                                     "Maximum test score cannot be zero or less than zero!")
+                if integer_error == "ok":
+                    input.delete(0, END)
         except ValueError:
             permission = False
             integer_error = messagebox.showerror("Score Error", "Test score can only contain numbers!")
             if integer_error == "ok":
                 input.delete(0, END)
+        except TypeError:
+            permission = False
+            integer_error = messagebox.showerror("Score Error", "Test score can only contain numbers!")
+            if integer_error == "ok":
+                input.delete(0, END)
+
         return permission
 
     def create_test():
@@ -304,16 +319,16 @@ def new_test():
                                text="Student mID:",
                                bg="#d3d3d3")
             student_id.grid(row=1, column=0, sticky=W, padx=5, pady=(15, 5))
-
+            student_score = Label(score_entry,
+                                  text="Obtained Score:",
+                                  bg="#d3d3d3")
             student_id_input = Entry(score_entry,
                                      borderwidth=0,
                                      font=11,
                                      width=10)
-            student_id_input.grid(row=1, column=1, sticky=EW, padx=5, pady=(15, 5))
             # Student marks obtained
-            student_score = Label(score_entry,
-                                  text="Obtained Score:",
-                                  bg="#d3d3d3")
+
+            student_id_input.grid(row=1, column=1, sticky=EW, padx=5, pady=(15, 5))
             student_score.grid(row=2, column=0, sticky=W, padx=5, pady=(15, 5))
 
             student_score_input = Entry(score_entry,
@@ -323,8 +338,8 @@ def new_test():
             student_score_input.grid(row=2, column=1, sticky=EW, padx=5, pady=(15, 5))
             # Next and Done button functions
             def next_function():
+                score_entry.attributes('-topmost', 'true')
                 unique_id = str(student_id_input.get()).upper()
-                score_entry.attributes("-topmost", "true")
                 with open("student_key_data.json", "r") as file:
                     try:
                         dictionary = json.load(file)
@@ -350,8 +365,8 @@ def new_test():
                                 if error_message == "ok":
                                     permission = False
                         if permission == True:
-                                admission_database = "admission_" + str(found_list[0]) + ".db"
-                                standard_table_name = new_test_standard_dict[str(found_list[1])]
+                            admission_database = "admission_" + str(found_list[0]) + ".db"
+                            standard_table_name = new_test_standard_dict[str(found_list[1])]
 
                         def retrv_det(rollcall, admin_database, std):
                             aconn = sqlite3.connect(admin_database)
@@ -424,10 +439,12 @@ def new_test():
                         print(100)
                         student_id_input.delete(0, END)
                         student_score_input.delete(0, END)
-
+                student_id_input.icursor(0)
             # Next button
             def enter_self(self):
                 next_function()
+                score_entry.attributes('-topmost', 'true')
+
             next_button = Button(score_entry,
                                  text="Next",
                                  font=("Helvetica", 10),
@@ -441,6 +458,8 @@ def new_test():
             next_button.grid(row=3, column=0, sticky=EW, padx=5, pady=(15, 5))
             score_entry.bind("<Return>", enter_self)
             # Done button
+            def done_self(self):
+                score_entry.destroy()
             done_button = Button(score_entry,
                                  text="Done",
                                  font=("Helvetica", 10),
@@ -449,9 +468,11 @@ def new_test():
                                  bg="#ff6565",
                                  fg="white",
                                  activeforeground="white",
-                                 activebackground="#ff4f4f")
+                                 activebackground="#ff4f4f",
+                                 command=score_entry.destroy)
             done_button.grid(row=3, column=1, sticky=EW, padx=5, pady=(15, 5))
-
+            score_entry.bind("<Escape>", done_self)
+            new_test_button.configure(state=DISABLED)
     # Create Test Button
     new_test_button = Button(new_test_root,
                              text="Create Test",
@@ -531,96 +552,108 @@ def open_old_test():
     subject_scroll.grid(row=3, column=1, sticky=EW, padx=16, pady=5)
 
     def call_test():
-        test_open_prompt_label.configure(text="Please select the test to open.")
-        admissions_year_label.destroy()
-        admissions_year_scroll.destroy()
-        test_open_standard_label.destroy()
-        test_open_standard_scroll.destroy()
-        subject_label.destroy()
-        subject_scroll.destroy()
-        test_name = "Test_" + str(admissions_year.get()) + "_" + open_test_sub_dict[subject_var.get()] + "_" + str(new_test_standard_dict[test_open_standard.get()]) + ".db"
-        if os.path.isfile(test_name) == True:
-            connection = sqlite3.connect(test_name)
-            cursor = connection.cursor()
-            cursor.execute("select * from SQLite_master")
-            test_name_table = []
-            row = cursor.fetchall()
-            rowlength = len(row)
-            length = range(rowlength)
-            for x in length:
-                if ((x % 2) == 0):
-                    test_name_table.append(row[x][1])
-            test_name_label = Label(test_open,
-                                    text="Test Name:",
-                                    bg="#d3d3d3")
-            test_name_label.grid(row=1, column=0, sticky=W, padx=16, pady=5)
-
-            test_name_var = StringVar()
-            test_name_var.set("Select the test you want to see.")
-            test_name_scroll = OptionMenu(test_open,
-                                          test_name_var,
-                                          *test_name_table)
-            test_name_scroll.grid(row=1, column=1, sticky=EW, padx=16, pady=5)
-
-            def get_lst(database_name, test_name):
-                connection = sqlite3.connect(database_name)
+        try:
+            test_open_prompt_label.configure(text="Please select the test to open.")
+            admissions_year_label.destroy()
+            admissions_year_scroll.destroy()
+            test_open_standard_label.destroy()
+            test_open_standard_scroll.destroy()
+            subject_label.destroy()
+            subject_scroll.destroy()
+            test_name = "Test_" + str(admissions_year.get()) + "_" + open_test_sub_dict[subject_var.get()] + "_" + str(new_test_standard_dict[test_open_standard.get()]) + ".db"
+            if os.path.isfile(test_name) == True:
+                connection = sqlite3.connect(test_name)
                 cursor = connection.cursor()
-                row = [("Rollno.", "First Name", "Last Name", "Marks Scored", "Maximun Marks", "Percentage Secured")]
-                try:
+                cursor.execute("select * from SQLite_master")
+                test_name_table = []
+                row = cursor.fetchall()
+                rowlength = len(row)
+                length = range(rowlength)
+                for x in length:
+                    if ((x % 2) == 0):
+                        test_name_table.append(row[x][1])
+                test_name_label = Label(test_open,
+                                        text="Test Name:",
+                                        bg="#d3d3d3")
+                test_name_label.grid(row=1, column=0, sticky=W, padx=16, pady=5)
 
-                    command = "select rollno,first,last,marks_scored,max_marks,percentage from {}".format(test_name)
-                    print(100)
-                    cursor.execute(command)
-                    rowss = cursor.fetchall()
-                except Error as e:
-                    rows = e
-                    print(e)
-                rows = row + rowss
+                test_name_var = StringVar()
+                test_name_var.set("Select the test you want to see.")
+                test_name_scroll = OptionMenu(test_open,
+                                              test_name_var,
+                                              *test_name_table)
+                test_name_scroll.grid(row=1, column=1, sticky=EW, padx=16, pady=5)
 
-                return rows
+                def get_lst(database_name, test_name):
+                    connection = sqlite3.connect(database_name)
+                    cursor = connection.cursor()
+                    row = [("Rollno.", "First Name", "Last Name", "Marks Scored", "Maximun Marks", "Percentage Secured")]
+                    try:
+                        test_open.attributes('-topmost', 'false')
+                        command = "select rollno,first,last,marks_scored,max_marks,percentage from {}".format(test_name)
+                        print(100)
+                        cursor.execute(command)
+                        rowss = cursor.fetchall()
+                    except Error as e:
+                        rows = e
+                        print(e)
+                    try:
+                        rows = row + rowss
+                        return rows
+                    except UnboundLocalError:
+                        test_open.attributes('-topmost', 'true')
+                        show_error = messagebox.showerror("Select a test", "Please select a test first.")
+                        if show_error == "ok":
+                            pass
 
-            def show_table():
-                class Mytable:
-                    def __init__(self, show_test_root):
-                        for i in range(totalrows):
-                            for j in range(totalcolumns):
-                                self.e = Label(show_test_root, width=20, fg="black", font=("Arial", 11))
-                                self.e.grid(row=i, column=j)
-                                self.e.configure(text=str(lst[i][j]), borderwidth=1, relief="solid", bg="#d3d3d3", anchor=W)
-                lst = get_lst(test_name, test_name_var.get())
+                def show_table():
+                    class Mytable:
+                        def __init__(self, show_test_root):
+                            for i in range(totalrows):
+                                for j in range(totalcolumns):
+                                    self.e = Label(show_test_root, width=20, fg="black", font=("Arial", 11))
+                                    self.e.grid(row=i, column=j)
+                                    self.e.configure(text=str(lst[i][j]), borderwidth=1, relief="solid", bg="#d3d3d3", anchor=W)
+                    lst = get_lst(test_name, test_name_var.get())
+                    try:
+                        totalrows = len(lst)
+                        totalcolumns = len(lst[1])
 
-                totalrows = len(lst)
-                totalcolumns = len(lst[1])
-                show_test_root = Toplevel()
-                show_test_root.geometry("1122x200")
+                        show_test_root = Toplevel(test_open)
+                        show_test_root.geometry("1122x200")
 
-                output_frame = Frame(show_test_root)
-                output_frame.pack(expand=True, fill=BOTH)
-                output_canvas = Canvas(output_frame, height=200, scrollregion=(0, 0, 10000, 10000))
+                        output_frame = Frame(show_test_root)
+                        output_frame.pack(expand=True, fill=BOTH)
+                        output_canvas = Canvas(output_frame, height=200, scrollregion=(0, 0, 10000, 10000))
 
-                v = Scrollbar(output_frame, orient=VERTICAL)
-                v.pack(side=RIGHT, fill=Y)
-                v.config(command=output_canvas.yview)
-                output_canvas.configure(yscrollcommand=v.set)
-                output_canvas.pack(side=LEFT, expand=True, fill=BOTH)
+                        v = Scrollbar(output_frame, orient=VERTICAL)
+                        v.pack(side=RIGHT, fill=Y)
+                        v.config(command=output_canvas.yview)
+                        output_canvas.configure(yscrollcommand=v.set)
+                        output_canvas.pack(side=LEFT, expand=True, fill=BOTH)
 
-                the_other_output_canvas = Canvas(output_canvas, width=948)
-                the_other_output_canvas.pack(side=LEFT)
-                output_canvas.bind_all('<MouseWheel>',
-                                       lambda event: output_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))
+                        the_other_output_canvas = Canvas(output_canvas, width=948)
+                        the_other_output_canvas.pack(side=LEFT)
+                        output_canvas.bind_all('<MouseWheel>',
+                                               lambda event: output_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))
 
-                show_test_root.title(test_name_var.get())
-                show_test_root.iconbitmap(favicon)
-                show_test_root.resizable(0, 0)
-                mt = Mytable(the_other_output_canvas)
-                scroll_lord = output_canvas.create_window(0, 0, window=the_other_output_canvas, anchor=NW)
-                output_canvas.configure(scrollregion=output_canvas.bbox("all"))
-
-            open_old_test_old_test_button.configure(text="See Test", command=show_table)
-        else:
-            show_error = messagebox.showerror("Data does not exist!", "No such test has been created!")
+                        show_test_root.title(test_name_var.get())
+                        show_test_root.iconbitmap(favicon)
+                        show_test_root.resizable(0, 0)
+                        mt = Mytable(the_other_output_canvas)
+                        scroll_lord = output_canvas.create_window(0, 0, window=the_other_output_canvas, anchor=NW)
+                        output_canvas.configure(scrollregion=output_canvas.bbox("all"))
+                    except:
+                        pass
+                open_old_test_old_test_button.configure(text="See Test", command=show_table)
+            else:
+                show_error = messagebox.showerror("Data does not exist!", "No such test has been created!")
+                if show_error == "ok":
+                    test_open.destroy()
+        except UnboundLocalError:
+            show_error = messagebox.showerror("Select a test", "Please select a test first.")
             if show_error == "ok":
-                test_open.destroy()
+                pass
     open_old_test_old_test_button = Button(test_open,
                                            text="Show Test",
                                            font=("Helvetica", 10),
