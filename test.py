@@ -7,6 +7,8 @@ from sqlite3 import Error
 import json
 import os.path
 import globalvariables
+import pyautogui
+
 favicon = "favicon.ico"
 
 def new_test():
@@ -224,6 +226,7 @@ def new_test():
         global test_connection, test_name
         if check_empty(new_test_max_score_input, 0) == True and check_int(new_test_max_score_input) == True and check_value(new_test_max_score_input, 999.99) == True :
             new_test_root.attributes('-topmost', 'false')
+            new_test_max_score_input.configure(state="readonly")
             # Test database creator
             test_connection = "Test_" + new_test_academic_year.get() + "_" + str(new_test_sub_dict[str(new_test_subject.get())]) + "_" + str(new_test_standard_dict[new_test_standard.get()]) + ".db"
             test_database_name = "Test_" + new_test_academic_year.get() + "_" + str(new_test_sub_dict[str(new_test_subject.get())]) + "_" + str(new_test_standard_dict[new_test_standard.get()])
@@ -352,7 +355,7 @@ def new_test():
                             pass
                         student_id_input.delete(0, END)
                         permission = False
-                if check_empty(student_score_input, 0) == True and check_empty(student_id_input, 0) and check_length(student_id_input, 4) == True and check_value(student_score_input, float(new_test_max_score_input.get())) == True:
+                if check_empty(student_score_input, 0) == True and check_empty(student_id_input, 0) == True and check_length(student_id_input, 4) == True and check_value(student_score_input, float(new_test_max_score_input.get())) == True:
                     if  permission == True:
                         with open("student_key_data.json", "r") as file:
                             try:
@@ -439,7 +442,9 @@ def new_test():
                         print(100)
                         student_id_input.delete(0, END)
                         student_score_input.delete(0, END)
+                pyautogui.press(["tab", "tab", "tab"])
                 student_id_input.icursor(0)
+
             # Next button
             def enter_self(self):
                 next_function()
@@ -473,6 +478,7 @@ def new_test():
             done_button.grid(row=3, column=1, sticky=EW, padx=5, pady=(15, 5))
             score_entry.bind("<Escape>", done_self)
             new_test_button.configure(state=DISABLED)
+
     # Create Test Button
     new_test_button = Button(new_test_root,
                              text="Create Test",
@@ -602,7 +608,7 @@ def open_old_test():
                         return rows
                     except UnboundLocalError:
                         test_open.attributes('-topmost', 'true')
-                        show_error = messagebox.showerror("Select a test", "Please select a test first.")
+                        show_error = messagebox.showerror("Error!", "Please select a test first.")
                         if show_error == "ok":
                             pass
 
@@ -651,7 +657,7 @@ def open_old_test():
                 if show_error == "ok":
                     test_open.destroy()
         except UnboundLocalError:
-            show_error = messagebox.showerror("Select a test", "Please select a test first.")
+            show_error = messagebox.showerror("Error!", "Please select a test first.")
             if show_error == "ok":
                 pass
     open_old_test_old_test_button = Button(test_open,

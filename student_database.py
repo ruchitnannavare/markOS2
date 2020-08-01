@@ -791,15 +791,15 @@ def access_data_function():
         access_data_button.grid(row=2, columnspan=2, padx=(15, 0), pady=(5, 0))
 
     one_proceed_button = Button(option_frame_1,
-                                    text="See One",
-                                    font=("Helvetica", 10),
-                                    width=12,
-                                    borderwidth=0,
-                                    bg="#45b4e7",
-                                    fg="white",
-                                    activeforeground="white",
-                                    activebackground="#1ca0dd",
-                                    command=access_data_function_for_one)
+                                text="See One",
+                                font=("Helvetica", 10),
+                                width=12,
+                                borderwidth=0,
+                                bg="#45b4e7",
+                                fg="white",
+                                activeforeground="white",
+                                activebackground="#1ca0dd",
+                                command=access_data_function_for_one)
     one_proceed_button.grid(row=1, rowspan=2, column=3, sticky=E, padx=(0, 10))
 
     option_frame_2 = Frame(data_access_top, bg="#bababa", height=100, width=340)
@@ -895,7 +895,7 @@ def access_data_function():
                 sender_list = get_chatids(connection_name, xcude)
 
                 access_all_toplevel.destroy()
-                student_list_toplevel = Toplevel()
+                student_list_toplevel = Toplevel(data_access_top)
                 student_list_toplevel.iconbitmap(favicon)
                 student_list_toplevel.resizable(0, 10)
 
@@ -1738,7 +1738,7 @@ def archive_function():
                 sender_list = get_chatids(connection_name, xcude)
 
                 access_all_toplevel.destroy()
-                student_list_toplevel = Toplevel()
+                student_list_toplevel = Toplevel(data_access_top)
                 student_list_toplevel.iconbitmap(favicon)
                 student_list_toplevel.resizable(0, 10)
 
