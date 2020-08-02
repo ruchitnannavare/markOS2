@@ -588,6 +588,8 @@ def custom_text():
 
                 custom_root.destroy()
                 text_layout_toplevel = Toplevel()
+                text_layout_toplevel.iconbitmap(favicon)
+                text_layout_toplevel.geometry("1155x500")
                 text_layout_toplevel.resizable(0, 10)
 
                 text_box_input = ScrolledText(text_layout_toplevel, width=100, height=10)
@@ -596,13 +598,10 @@ def custom_text():
                 output_frame = Frame(text_layout_toplevel, width=1130, height=300)
                 output_frame.pack(expand=True, fill=BOTH)
                 output_canvas = Canvas(output_frame, width=1130, scrollregion=(0, 0, 1000, 1000))
-                h = Scrollbar(output_frame, orient=HORIZONTAL, bg="green")
-                h.pack(side=BOTTOM, fill=X)
-                h.config(command=output_canvas.xview)
                 v = Scrollbar(output_frame, orient=VERTICAL)
                 v.pack(side=RIGHT, fill=Y)
                 v.config(command=output_canvas.yview)
-                output_canvas.configure(xscrollcommand=h.set, yscrollcommand=v.set)
+                output_canvas.configure(yscrollcommand=v.set)
                 output_canvas.pack(side=LEFT, expand=True, fill=BOTH)
 
                 the_other_output_canvas = Canvas(output_canvas, width=1130)
@@ -765,7 +764,9 @@ def custom_text():
 
                     both_button.grid(row=0, column=3, padx=4)
                     indexing_number += 1
-
+                top_height = len(sender_list) * 30
+                output_canvas.configure(height=top_height)
+                the_other_output_canvas.configure(height=top_height)
                 scroll_lord = output_canvas.create_window(0, 0, window=the_other_output_canvas, anchor=NW)
                 output_canvas.configure(scrollregion=output_canvas.bbox("all"))
 

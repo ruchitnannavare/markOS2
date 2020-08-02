@@ -626,6 +626,7 @@ def open_old_test():
                         totalcolumns = len(lst[1])
 
                         show_test_root = Toplevel(test_open)
+                        show_test_root.iconbitmap(favicon)
                         show_test_root.geometry("1122x200")
 
                         output_frame = Frame(show_test_root)
@@ -636,7 +637,7 @@ def open_old_test():
                         v.pack(side=RIGHT, fill=Y)
                         v.config(command=output_canvas.yview)
                         output_canvas.configure(yscrollcommand=v.set)
-                        output_canvas.pack(side=LEFT, expand=True, fill=BOTH)
+                        output_canvas.pack(side=TOP, expand=True, fill=BOTH)
 
                         the_other_output_canvas = Canvas(output_canvas, width=948)
                         the_other_output_canvas.pack(side=LEFT)
@@ -644,9 +645,12 @@ def open_old_test():
                                                lambda event: output_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))
 
                         show_test_root.title(test_name_var.get())
-                        show_test_root.iconbitmap(favicon)
-                        show_test_root.resizable(0, 0)
+                        show_test_root.resizable(0, 10)
                         mt = Mytable(the_other_output_canvas)
+                        top_height = totalrows * 30
+                        the_other_output_canvas.configure(height=top_height)
+                        output_canvas.configure(height=top_height)
+
                         scroll_lord = output_canvas.create_window(0, 0, window=the_other_output_canvas, anchor=NW)
                         output_canvas.configure(scrollregion=output_canvas.bbox("all"))
                     except:

@@ -869,8 +869,8 @@ def access_data_function():
                                             *academic_year_list)
         admissions_year_scroll.grid(row=2, column=1, sticky=EW, padx=16, pady=5)
 
+        all_proceed_button.configure(state=DISABLED)
         def access_batch_details():
-            all_proceed_button.configure(state=DISABLED)
             connection_name = "admission_" + str(admissions_year.get()) + ".db"
             xcude = standard_dict[str(standard.get())]
             if os.path.isfile(connection_name) == True:
@@ -897,22 +897,25 @@ def access_data_function():
                 access_all_toplevel.destroy()
                 student_list_toplevel = Toplevel(data_access_top)
                 student_list_toplevel.iconbitmap(favicon)
+                student_list_toplevel.geometry("963x500")
                 student_list_toplevel.resizable(0, 10)
 
-                output_frame = Frame(student_list_toplevel, width=948, height=300)
+                output_frame = Frame(student_list_toplevel, width=948)
                 output_frame.pack(expand=True, fill=BOTH)
                 output_canvas = Canvas(output_frame, width=950, scrollregion=(0, 0, 10000, 10000))
-                h = Scrollbar(output_frame, orient=HORIZONTAL, bg="green")
-                h.pack(side=BOTTOM, fill=X)
-                h.config(command=output_canvas.xview)
                 v = Scrollbar(output_frame, orient=VERTICAL)
-                v.pack(side=RIGHT, fill=Y)
+                v.pack(side=RIGHT, fill=Y, expand=False)
                 v.config(command=output_canvas.yview)
-                output_canvas.configure(xscrollcommand=h.set, yscrollcommand=v.set)
-                output_canvas.pack(side=LEFT, expand=True, fill=BOTH)
+                output_canvas.configure(yscrollcommand=v.set)
+                output_canvas.pack(side=LEFT, expand=True)
+
 
                 the_other_output_canvas = Canvas(output_canvas, width=948)
-                the_other_output_canvas.pack(side=LEFT)
+                the_other_output_canvas.pack(side=LEFT, expand=True)
+
+
+
+
                 output_canvas.bind_all('<MouseWheel>', lambda event: output_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units"))
 
                 bgcolo = "#585858"
@@ -1280,9 +1283,22 @@ def access_data_function():
                     open_button.grid(row=0, column=1)
 
                     indexing_number += 1
+                top_height = len(sender_list) * 30
+                output_canvas.configure(height=top_height)
+                the_other_output_canvas.configure(height=top_height)
+
                 scroll_lord = output_canvas.create_window(0, 0, window=the_other_output_canvas, anchor=NW)
                 output_canvas.configure(scrollregion=output_canvas.bbox("all"))
 
+                print(top_height)
+                """def OnCanvasConfigure(self, event):
+                    width = 0
+                    for child in self.the_.grid_slaves():
+                        width += child.winfo_reqwidth()
+
+                    self.canvas.itemconfigure(self.the_other_output_canvas, width=width, height=event.height)
+
+                the_other_output_canvas.bind("<Configure>", OnCanvasConfigure)"""
         access_batch_details_button = Button(access_all_toplevel,
                                              text="Next >",
                                              font=("Helvetica", 10),
@@ -1712,8 +1728,8 @@ def archive_function():
                                             *academic_year_list)
         admissions_year_scroll.grid(row=2, column=1, sticky=EW, padx=16, pady=5)
 
+        all_proceed_button.configure(state=DISABLED)
         def access_batch_details():
-            all_proceed_button.configure(state=DISABLED)
             connection_name = "admission_" + str(admissions_year.get()) + ".db"
             xcude = standard_dict[str(standard.get())]
             if os.path.isfile(connection_name) == True:
@@ -1740,18 +1756,16 @@ def archive_function():
                 access_all_toplevel.destroy()
                 student_list_toplevel = Toplevel(data_access_top)
                 student_list_toplevel.iconbitmap(favicon)
+                student_list_toplevel.geometry("963x500")
                 student_list_toplevel.resizable(0, 10)
 
                 output_frame = Frame(student_list_toplevel, width=948, height=300)
                 output_frame.pack(expand=True, fill=BOTH)
 
                 output_canvas = Canvas(output_frame, width=948, scrollregion=(0, 0, 10000, 10000))
-                h = Scrollbar(output_frame, orient=HORIZONTAL, bg="green")
-                h.pack(side=BOTTOM, fill=X)
                 v = Scrollbar(output_frame, orient=VERTICAL)
                 v.pack(side=RIGHT, fill=Y)
-                output_canvas.configure(xscrollcommand=h.set, yscrollcommand=v.set)
-                h.config(command=output_canvas.xview)
+                output_canvas.configure(yscrollcommand=v.set)
                 v.config(command=output_canvas.yview)
 
                 output_canvas.pack()
@@ -2127,6 +2141,10 @@ def archive_function():
                     open_button.grid(row=0, column=1)
 
                     indexing_number += 1
+                top_height = len(sender_list) * 30
+                output_canvas.configure(height=top_height)
+                the_other_output_canvas.configure(height=top_height)
+
                 scroll_lord = output_canvas.create_window(0, 0, window=the_other_output_canvas, anchor=NW)
                 output_canvas.configure(scrollregion=output_canvas.bbox("all"))
 
@@ -2145,7 +2163,8 @@ def archive_function():
 
 
 
-    all_proceed_button = Button(option_frame_2, text="See Batch",
+    all_proceed_button = Button(option_frame_2,
+                                text="See Batch",
                                 font=("Helvetica", 10),
                                 width=12,
                                 borderwidth=0,
